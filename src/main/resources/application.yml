@@ -1,0 +1,21 @@
+spring:
+  data:
+    cassandra:
+      key-space-name: bands
+      username: solKDJsrRnjAinNkHRQLghgA
+      password: -9U.c8k1LThZkMv4F-N46b_WTCxxnhZIwqpJAx.yKHojKmXxr0+eDlfbt-DQMolm8nYDYtXQBMz4y6,nBOMJxpS+sejmCIlsF_tC_pLI4jOjGtk8s2Q8Z2zLr411b6nC
+      schema-action: create_if_not_exists
+      request:
+        timeout: 10s
+      connection:
+        connection-timeout: 10s
+        init-query-timeout: 10s
+
+datastax.astra:
+    secure-connect-bundle: secure-connect-bands.zip
+
+astra.db:
+    id: 369e790d-6793-4e1a-9341-976105af0832-1
+    region: us-east1
+    keyspace: bands
+    application.token: AstraCS:solKDJsrRnjAinNkHRQLghgA:7b2e4dfd8a8082afc2a00714f3c46cd9a786f057036fedac1824c9d70b681501
