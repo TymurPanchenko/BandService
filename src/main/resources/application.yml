@@ -19,7 +19,3 @@ astra.db:
     region: us-east1
     keyspace: bands
     application.token: AstraCS:solKDJsrRnjAinNkHRQLghgA:7b2e4dfd8a8082afc2a00714f3c46cd9a786f057036fedac1824c9d70b681501
-
-logging:
-  file:
-    name: log.txt
