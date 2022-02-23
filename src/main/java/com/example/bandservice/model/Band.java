@@ -10,6 +10,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+
 @Data
 @Table("band")
 public class Band {
@@ -17,9 +18,8 @@ public class Band {
     @PrimaryKeyColumn(
             name = "id",
             ordinal = 0,
-            type = PrimaryKeyType.PARTITIONED
-    )
-    private Long id;
+            type = PrimaryKeyType.PARTITIONED)
+    private Integer id;
     @Column(value = "name")
     @NotBlank
     @NotNull

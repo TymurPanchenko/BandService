@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface BandService {
     Band create(Band band);
-    Band readById(Long id);
+    Band readById(Integer id);
     Band readByName(String name);
-    Band update(Long id, Band band);
-    void delete(Long id);
+    Band update(Integer id, Band band);
+    void delete(Integer id);
     List<Band> getAll();
 }

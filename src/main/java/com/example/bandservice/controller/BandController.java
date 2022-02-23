@@ -26,12 +26,6 @@ public class BandController {
         Band band1 = bandService.readByName(band.getName());
         return ResponseEntity.ok(bandService.create(band1));
     }
-//    @GetMapping
-//    public ResponseEntity<List<Band>> findAll() {
-//        logger.info("Getting all bands");
-//        return ok(bandService.getAll());
-//    }
-
     @GetMapping
     public ResponseEntity<Band> getBand(@RequestParam("bandName")String name){
         return ResponseEntity.ok(bandService.readByName(name));

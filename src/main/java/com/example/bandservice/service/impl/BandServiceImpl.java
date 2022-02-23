@@ -1,42 +1,50 @@
 package com.example.bandservice.service.impl;
 
-import com.example.bandservice.exception.NullBandReferenceException;
 import com.example.bandservice.model.Band;
 import com.example.bandservice.repository.BandRepository;
 import com.example.bandservice.service.BandService;
 import org.springframework.stereotype.Service;
 
-import javax.lang.model.UnknownEntityException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class BandServiceImpl implements BandService {
 
-    private BandRepository bandRepository;
+    private final BandRepository bandRepository;
 
     public BandServiceImpl(BandRepository bandRepository) {
         this.bandRepository = bandRepository;
     }
-    @Override
-    public Band create(Band band) {
-        try {
-            return bandRepository.save(band);
-        } catch (IllegalArgumentException e) {
-            throw new NullBandReferenceException("Band cannot be null");
-        }
 
+    @Override
+    public Band create(Band question) {
+        List<Band> list = getAll();
+        int a;
+        try {
+            a = list.stream().max((o1, o2) -> {
+                return (int) (o1.getId() - o2.getId());
+            }).get().getId();
+        } catch (NoSuchElementException e) {
+            a = 0;
+        }
+        question.setId(++a);
+        return bandRepository.save(question);
     }
 
     @Override
-    public Band readById(Long id) {
-        Optional<Band> optional = bandRepository.findById(id);
-        if (optional.isPresent()) {
-            return optional.get();
-        }
-        throw new NoSuchElementException("Band with id " + id + " not found");
+    public Band readById(Integer id) {
+        return bandRepository.getBandById(id);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        bandRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Band> getAll() {
+        return bandRepository.findAllBands();
     }
 
     @Override
@@ -45,29 +53,13 @@ public class BandServiceImpl implements BandService {
     }
 
     @Override
-    public Band update(Long id, Band band) {
-        if (band != null) {
-            Band oldBand = readById(id);
-            if (band.getName() != null) {
-                return bandRepository.update(id, band.getName());
-            }
+    public Band update(Integer id, Band t) {
+        Band band1 = readById(id);
+        band1.setId(id);
+        if (t.getName() != null) {
+            band1.setName(t.getName());
         }
-        throw new NullBandReferenceException("User cannot be 'null'");
-    }
-
-    @Override
-    public void delete(Long id) {
-        Band band = readById(id);
-        if (band != null) {
-            bandRepository.deleteById(id);
-        } else {
-            throw new NoSuchElementException("Band with id " + id + " not found");
-        }
-    }
-
-    @Override
-    public List<Band> getAll() {
-        List<Band> bands = bandRepository.findAllBands();
-        return bands.isEmpty() ? new ArrayList<>() : bands;
+        bandRepository.update(id,band1.getName());
+        return band1;
     }
 }

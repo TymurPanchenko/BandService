@@ -2,7 +2,6 @@ package com.example.bandservice;
 
 import com.example.bandservice.configuration.DataStaxAstraProperties;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.cassandra.CqlSessionBuilderCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -20,7 +19,9 @@ public class BandServiceApplication {
 
     @Bean
     public CqlSessionBuilderCustomizer sessionBuilderCustomizer(DataStaxAstraProperties astraProperties) {
+
         Path bundle = astraProperties.getSecureConnectBundle().toPath();
         return builder -> builder.withCloudSecureConnectBundle(bundle);
+
     }
 }

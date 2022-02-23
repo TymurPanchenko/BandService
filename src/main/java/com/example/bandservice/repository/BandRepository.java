@@ -9,11 +9,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BandRepository extends CassandraRepository<Band, Long> {
+public interface BandRepository extends CassandraRepository<Band,Integer> {
     @Query("select * from band where name=:name allow filtering")
-    public Band findByName(@Param("name") String name);
+    Band findByName(@Param("name") String name);
     @Query("select * from band")
-    public List<Band> findAllBands();
+    List<Band> findAllBands();
+    @Query("select * from band where id=:id allow filtering")
+    Band getBandById(@Param("id")int id);
     @Query("update band set name=:name where id=:id")
-    public Band update(@Param("id")Long id, @Param("name")String name);
+    Band update(@Param("id")int id, @Param("name")String name);
 }
