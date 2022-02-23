@@ -22,26 +22,29 @@ public class BandController {
     }
 
     @PostMapping
-    public ResponseEntity<Band> saveBand(@Valid @RequestBody Band band){
+    public ResponseEntity<Band> saveBand(@Valid @RequestBody Band band) {
         Band band1 = bandService.readByName(band.getName());
         return ResponseEntity.ok(bandService.create(band1));
     }
+
     @GetMapping
-    public ResponseEntity<Band> getBand(@RequestParam("bandName")String name){
+    public ResponseEntity<Band> getBand(@RequestParam("bandName") String name) {
         return ResponseEntity.ok(bandService.readByName(name));
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Band> findBandById(@PathVariable("id") Long id){
+    public ResponseEntity<Band> findBandById(@PathVariable("id") Long id) {
         Band band = bandService.readById(id);
-            return ResponseEntity.ok(band);
+        return ResponseEntity.ok(band);
     }
 
     @DeleteMapping("/{id}")
-    public void  deleteBand(@PathVariable("id") Long id){
+    public void deleteBand(@PathVariable("id") Long id) {
         bandService.delete(id);
     }
+
     @PatchMapping("/{id}")
-    public ResponseEntity<Band> updateBand(@PathVariable("id") Long id, @RequestBody Band band){
+    public ResponseEntity<Band> updateBand(@PathVariable("id") Long id, @RequestBody Band band) {
         return ResponseEntity.ok(bandService.update(id, band));
     }
 }

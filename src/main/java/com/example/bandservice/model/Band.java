@@ -19,7 +19,7 @@ public class Band {
             name = "id",
             ordinal = 0,
             type = PrimaryKeyType.PARTITIONED)
-    private Integer id;
+    private Long id;
     @Column(value = "name")
     @NotBlank
     @NotNull

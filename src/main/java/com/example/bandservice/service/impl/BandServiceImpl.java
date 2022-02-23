@@ -20,25 +20,25 @@ public class BandServiceImpl implements BandService {
     @Override
     public Band create(Band question) {
         List<Band> list = getAll();
-        int a;
+        Long a;
         try {
             a = list.stream().max((o1, o2) -> {
                 return (int) (o1.getId() - o2.getId());
             }).get().getId();
         } catch (NoSuchElementException e) {
-            a = 0;
+            a = 0L;
         }
         question.setId(++a);
         return bandRepository.save(question);
     }
 
     @Override
-    public Band readById(Integer id) {
+    public Band readById(Long id) {
         return bandRepository.getBandById(id);
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         bandRepository.deleteById(id);
     }
 
@@ -53,13 +53,13 @@ public class BandServiceImpl implements BandService {
     }
 
     @Override
-    public Band update(Integer id, Band t) {
+    public Band update(Long id, Band band) {
         Band band1 = readById(id);
         band1.setId(id);
-        if (t.getName() != null) {
-            band1.setName(t.getName());
+        if (band.getName() != null) {
+            band1.setName(band.getName());
         }
-        bandRepository.update(id,band1.getName());
+        bandRepository.update(id, band1.getName());
         return band1;
     }
 }
