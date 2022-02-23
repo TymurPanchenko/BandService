@@ -12,10 +12,14 @@ spring:
         init-query-timeout: 10s
 
 datastax.astra:
-    secure-connect-bundle: G:\projects\BandService\secure-connect-band.zip
+    secure-connect-bundle: secure-connect-band.zip
 
 astra.db:
     id: 369e790d-6793-4e1a-9341-976105af0832-1
     region: us-east1
     keyspace: bands
     application.token: AstraCS:solKDJsrRnjAinNkHRQLghgA:7b2e4dfd8a8082afc2a00714f3c46cd9a786f057036fedac1824c9d70b681501
+
+logging:
+  file:
+    name: log.txt
