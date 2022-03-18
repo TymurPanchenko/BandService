@@ -1,11 +1,13 @@
 package com.example.bandservice;
 
+import com.example.bandservice.configuration.BandClientProperties;
 import com.example.bandservice.configuration.DataStaxAstraProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.cassandra.CqlSessionBuilderCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
 import java.nio.file.Path;
 
