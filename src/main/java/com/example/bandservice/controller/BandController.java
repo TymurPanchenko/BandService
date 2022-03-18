@@ -40,6 +40,14 @@ public class BandController {
         logger.info("Getting band name = {}", name);
         return ResponseEntity.ok(bandService.readByName(name));
     }
+    
+    @GetMapping("/bb/{id}")
+    public ResponseEntity<String> getUnicornByIdByEntity(@PathVariable final String id) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForEntity(
+                "https://mafias-user-service-app.herokuapp.com/api/users/" + id,
+                String.class);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Band> findBandById(@PathVariable("id") Long id) {
