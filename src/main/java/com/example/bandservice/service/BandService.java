@@ -3,6 +3,7 @@ package com.example.bandservice.service;
 import com.example.bandservice.model.Band;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BandService {
     Band create(Band band);
@@ -16,4 +17,10 @@ public interface BandService {
     void delete(Long id);
 
     List<Band> getAll();
+
+    Map<String, List<String>> getReport();
+
+    List<String> getSingleReport(Long id);
+
+    String getReadyCheck(Long id, Long taskId);
 }

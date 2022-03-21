@@ -27,4 +27,5 @@ logging:
 bands:
   url-weapons: https://weapon-service-v1.herokuapp.com/api/v1/weapons/
   url-users: https://mafias-user-service-app.herokuapp.com/api/users/
-  url-tasks: https://test-herokus1.herokuapp.com/tasks?taskName=
+  url-tasks: https://test-herokus1.herokuapp.com/tasks/
+  url-bands: https://heroku-bands.herokuapp.com/bands/

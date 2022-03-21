@@ -3,20 +3,17 @@ package com.example.bandservice.controller;
 import com.example.bandservice.exception.NullBandReferenceException;
 import com.example.bandservice.model.Band;
 import com.example.bandservice.service.BandService;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -67,6 +64,31 @@ public class BandController {
         } else {
             return ResponseEntity.ok(band);
         }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Band>> findAll() {
+        logger.info("Getting all bands");
+        return ok(bandService.getAll());
+
+    }
+
+    @GetMapping("/report")
+    public ResponseEntity<Map<String, List<String>>> getReport() {
+        logger.info("Getting global report");
+        return ResponseEntity.ok(bandService.getReport());
+    }
+
+    @GetMapping("/{id}/report")
+    public ResponseEntity<List<String>> getBandReport(@PathVariable("id") Long id) {
+        logger.info("Getting band report with id {}", id);
+        return ResponseEntity.ok(bandService.getSingleReport(id));
+    }
+
+    @GetMapping("/{id}/tasks/{taskId}/check")
+    public ResponseEntity<String> makeReadyCheck(@PathVariable("id") Long id, @PathVariable("taskId") Long taskId) {
+        logger.info("Checking task with id {}", taskId);
+        return ResponseEntity.ok(bandService.getReadyCheck(id, taskId));
     }
 
     @DeleteMapping("/{id}")
