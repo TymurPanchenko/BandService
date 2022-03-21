@@ -14,6 +14,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import org.springframework.web.client.RestTemplate;
+
 import javax.validation.Valid;
 import java.util.Objects;
 
@@ -46,6 +48,14 @@ public class BandController {
     public ResponseEntity<Band> getBand(@RequestParam("bandName") String name) {
         logger.info("Getting band name = {}", name);
         return ResponseEntity.ok(bandService.readByName(name));
+    }
+    
+    @GetMapping("/bb/{id}")
+    public ResponseEntity<String> getUnicornByIdByEntity(@PathVariable final String id) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForEntity(
+                "https://mafias-user-service-app.herokuapp.com/api/users/" + id,
+                String.class);
     }
 
     @GetMapping("/{id}")
