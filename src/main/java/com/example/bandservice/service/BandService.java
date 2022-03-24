@@ -22,5 +22,5 @@ public interface BandService {
 
     List<String> getSingleReport(Long id);
 
-    String getReadyCheck(Long id, Long taskId);
+    String getReadyCheck(Long id);
 }

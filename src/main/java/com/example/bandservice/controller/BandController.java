@@ -42,17 +42,16 @@ public class BandController {
     }
 
     @GetMapping
-    public ResponseEntity<Band> getBand(@RequestParam("bandName") String name) {
-        logger.info("Getting band name = {}", name);
-        return ResponseEntity.ok(bandService.readByName(name));
-    }
-    
-    @GetMapping("/bb/{id}")
-    public ResponseEntity<String> getUnicornByIdByEntity(@PathVariable final String id) {
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForEntity(
-                "https://mafias-user-service-app.herokuapp.com/api/users/" + id,
-                String.class);
+    public ResponseEntity<?> getBand(@RequestParam(value = "bandName", required = false) String name) {
+
+        if (name == null) {
+            logger.info("Getting all bands");
+            return ResponseEntity.ok(bandService.getAll());
+        } else {
+            logger.info("Getting band name = {}", name);
+            return ResponseEntity.ok(bandService.readByName(name));
+        }
+
     }
 
     @GetMapping("/{id}")
@@ -64,13 +63,6 @@ public class BandController {
         } else {
             return ResponseEntity.ok(band);
         }
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<Band>> findAll() {
-        logger.info("Getting all bands");
-        return ok(bandService.getAll());
-
     }
 
     @GetMapping("/report")
@@ -85,10 +77,10 @@ public class BandController {
         return ResponseEntity.ok(bandService.getSingleReport(id));
     }
 
-    @GetMapping("/{id}/tasks/{taskId}/check")
-    public ResponseEntity<String> makeReadyCheck(@PathVariable("id") Long id, @PathVariable("taskId") Long taskId) {
-        logger.info("Checking task with id {}", taskId);
-        return ResponseEntity.ok(bandService.getReadyCheck(id, taskId));
+    @GetMapping("/tasks/{id}/check")
+    public ResponseEntity<String> makeReadyCheck(@PathVariable("id") Long id) {
+        logger.info("Checking task with id {}", id);
+        return ResponseEntity.ok(bandService.getReadyCheck(id));
     }
 
     @DeleteMapping("/{id}")

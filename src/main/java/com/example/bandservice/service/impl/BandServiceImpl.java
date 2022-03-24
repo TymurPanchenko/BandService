@@ -67,7 +67,7 @@ public class BandServiceImpl implements BandService {
                 }).getBody();
         Map<String, List<String>> map = new HashMap<>();
         if (bands == null) {
-            throw new NullBandReferenceException("Null band reference");
+            throw new NullBandReferenceException("There are on bands");
         }
         for (Band b : bands) {
             map.put(b.getName(), getSingleReport(b.getId()));
@@ -93,15 +93,27 @@ public class BandServiceImpl implements BandService {
         List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getBand_id().equals(id)).collect(Collectors.toList());
         List<Task> listTask = tasks.stream().filter(o -> o.getId().equals(id)).collect(Collectors.toList());
         List<String> s = new ArrayList<>();
-        s.add(listUser.toString());
-        s.add(listWeapon.toString());
-        s.add(listTask.toString());
+        if (listUser.isEmpty()) {
+            s.add("There is no users");
+        } else {
+            s.add(listUser.toString());
+        }
+        if (listWeapon.isEmpty()) {
+            s.add("There is no weapons");
+        } else {
+            s.add(listWeapon.toString());
+        }
+        if (listTask.isEmpty()) {
+            s.add("There is no tasks");
+        } else {
+            s.add(listTask.toString());
+        }
         return s;
     }
 
     @Override
-    public String getReadyCheck(Long id, Long taskId) {
-        if (taskId.equals(0L)) {
+    public String getReadyCheck(Long id) {
+        if (id.equals(0L)) {
             return "Task is already done";
         }
         List<User> users = restTemplate.exchange(bandClientProperties.getUrlUsers(),
@@ -115,7 +127,10 @@ public class BandServiceImpl implements BandService {
                 restTemplate.exchange(bandClientProperties.getUrlTasks(),
                         HttpMethod.GET, null, new ParameterizedTypeReference<List<Task>>() {
                         }).getBody();
-        List<Task> listTask = tasks.stream().filter(o -> o.getId().equals(taskId)).collect(Collectors.toList());
+        List<Task> listTask = tasks.stream().filter(o -> o.getId().equals(id)).collect(Collectors.toList());
+        if (listTask.isEmpty()) {
+            throw new NullBandReferenceException("There is no task with id " + id);
+        }
         Long l = listTask.get(0).getId();
         List<User> listUser = users.stream().filter(o -> o.getTaskId().equals(l)).collect(Collectors.toList());
         List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getTask_id().equals(l)).collect(Collectors.toList());
