@@ -9,8 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.client.RestTemplate;
+
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/bands")
@@ -36,9 +42,16 @@ public class BandController {
     }
 
     @GetMapping
-    public ResponseEntity<Band> getBand(@RequestParam("bandName") String name) {
-        logger.info("Getting band name = {}", name);
-        return ResponseEntity.ok(bandService.readByName(name));
+    public ResponseEntity<?> getBand(@RequestParam(value = "bandName", required = false) String name) {
+
+        if (name == null) {
+            logger.info("Getting all bands");
+            return ResponseEntity.ok(bandService.getAll());
+        } else {
+            logger.info("Getting band name = {}", name);
+            return ResponseEntity.ok(bandService.readByName(name));
+        }
+
     }
 
     @GetMapping("/{id}")
@@ -50,6 +63,24 @@ public class BandController {
         } else {
             return ResponseEntity.ok(band);
         }
+    }
+
+    @GetMapping("/report")
+    public ResponseEntity<Map<String, List<String>>> getReport() {
+        logger.info("Getting global report");
+        return ResponseEntity.ok(bandService.getReport());
+    }
+
+    @GetMapping("/{id}/report")
+    public ResponseEntity<List<String>> getBandReport(@PathVariable("id") Long id) {
+        logger.info("Getting band report with id {}", id);
+        return ResponseEntity.ok(bandService.getSingleReport(id));
+    }
+
+    @GetMapping("/tasks/{id}/check")
+    public ResponseEntity<String> makeReadyCheck(@PathVariable("id") Long id) {
+        logger.info("Checking task with id {}", id);
+        return ResponseEntity.ok(bandService.getReadyCheck(id));
     }
 
     @DeleteMapping("/{id}")
