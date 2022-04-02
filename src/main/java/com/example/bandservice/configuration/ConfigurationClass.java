@@ -13,6 +13,7 @@ public class ConfigurationClass {
             cqlSessionBuilder.withCloudSecureConnectBundle(properties.getSecureConnectBundle().toPath());
         };
     }
+
     @Bean
     public HttpComponentsClientHttpRequestFactory factory(){
         return new HttpComponentsClientHttpRequestFactory();

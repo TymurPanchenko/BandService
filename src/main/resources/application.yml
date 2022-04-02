@@ -29,3 +29,7 @@ bands:
   url-users: https://mafias-user-service-app.herokuapp.com/api/users/
   url-tasks: https://test-herokus1.herokuapp.com/tasks/
   url-bands: https://heroku-bands.herokuapp.com/bands/
+
+my:
+  app:
+    secret: myappsecret

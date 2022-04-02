@@ -2,6 +2,7 @@ package com.example.bandservice.service;
 
 import com.example.bandservice.model.Band;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -23,4 +24,8 @@ public interface BandService {
     List<String> getSingleReport(Long id);
 
     String getReadyCheck(Long id);
+
+    boolean isTokenValidBoss(HttpServletRequest request);
+
+    boolean isTokenValidBossAndUser(HttpServletRequest request);
 }

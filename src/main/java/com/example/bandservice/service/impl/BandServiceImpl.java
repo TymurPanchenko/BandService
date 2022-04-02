@@ -8,12 +8,16 @@ import com.example.bandservice.model.User;
 import com.example.bandservice.model.Weapon;
 import com.example.bandservice.repository.BandRepository;
 import com.example.bandservice.service.BandService;
+import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,6 +27,8 @@ public class BandServiceImpl implements BandService {
     private final BandRepository bandRepository;
     private final RestTemplate restTemplate;
     private final BandClientProperties bandClientProperties;
+    @Value("my.app.secret")
+    private String jwtSecret;
 
     public BandServiceImpl(BandRepository bandRepository, HttpComponentsClientHttpRequestFactory factory, BandClientProperties bandClientProperties) {
         this.bandRepository = bandRepository;
@@ -155,6 +161,36 @@ public class BandServiceImpl implements BandService {
         }
         bandRepository.update(id, band1.getName());
         return band1;
+    }
+
+    @Override
+    public boolean isTokenValidBoss(HttpServletRequest request) {
+        try {
+            String headerAuth = request.getHeader("Authorization");
+            if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
+                String[] s = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(headerAuth.substring(7)).getBody().getSubject().split(" ");
+                return s[2].contains("ROLE_BOSS");
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isTokenValidBossAndUser(HttpServletRequest request) {
+        try {
+            String headerAuth = request.getHeader("Authorization");
+            if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
+                String[] s = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(headerAuth.substring(7)).getBody().getSubject().split(" ");
+                return s[2].contains("ROLE_BOSS") || s[2].contains("ROLE_USER");
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

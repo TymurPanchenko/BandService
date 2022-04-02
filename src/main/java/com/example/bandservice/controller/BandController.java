@@ -5,12 +5,15 @@ import com.example.bandservice.model.Band;
 import com.example.bandservice.service.BandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +32,10 @@ public class BandController {
     }
 
     @PostMapping
-    public ResponseEntity<Band> saveBand(@Valid @RequestBody Band band, Errors errors) {
+    public ResponseEntity<Band> saveBand(@Valid @RequestBody Band band, Errors errors, HttpServletRequest request) {
+        if (!bandService.isTokenValidBoss(request)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         logger.info("Creating new band");
         if (errors.hasErrors()) {
             throw new NullBandReferenceException("Band is not valid");
@@ -42,8 +48,11 @@ public class BandController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getBand(@RequestParam(value = "bandName", required = false) String name) {
+    public ResponseEntity<?> getBand(@RequestParam(value = "bandName", required = false) String name, HttpServletRequest request) {
 
+        if (!bandService.isTokenValidBoss(request)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         if (name == null) {
             logger.info("Getting all bands");
             return ResponseEntity.ok(bandService.getAll());
@@ -55,7 +64,10 @@ public class BandController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Band> findBandById(@PathVariable("id") Long id) {
+    public ResponseEntity<Band> findBandById(@PathVariable("id") Long id, HttpServletRequest request) {
+        if (!bandService.isTokenValidBossAndUser(request)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         logger.info("Getting band id = {}", id);
         Band band = bandService.readById(id);
         if (Objects.isNull(band)) {
@@ -66,31 +78,46 @@ public class BandController {
     }
 
     @GetMapping("/report")
-    public ResponseEntity<Map<String, List<String>>> getReport() {
+    public ResponseEntity<Map<String, List<String>>> getReport(HttpServletRequest request) {
+        if (!bandService.isTokenValidBoss(request)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         logger.info("Getting global report");
         return ResponseEntity.ok(bandService.getReport());
     }
 
     @GetMapping("/{id}/report")
-    public ResponseEntity<List<String>> getBandReport(@PathVariable("id") Long id) {
+    public ResponseEntity<List<String>> getBandReport(@PathVariable("id") Long id, HttpServletRequest request) {
+        if (!bandService.isTokenValidBoss(request)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         logger.info("Getting band report with id {}", id);
         return ResponseEntity.ok(bandService.getSingleReport(id));
     }
 
     @GetMapping("/tasks/{id}/check")
-    public ResponseEntity<String> makeReadyCheck(@PathVariable("id") Long id) {
+    public ResponseEntity<String> makeReadyCheck(@PathVariable("id") Long id, HttpServletRequest request) {
+        if (!bandService.isTokenValidBoss(request)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         logger.info("Checking task with id {}", id);
         return ResponseEntity.ok(bandService.getReadyCheck(id));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBand(@PathVariable("id") Long id) {
+    public void deleteBand(@PathVariable("id") Long id, HttpServletRequest request) {
+        if (!bandService.isTokenValidBoss(request)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         logger.info("Deleting band id = {}", id);
         bandService.delete(id);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Band> updateBand(@PathVariable("id") Long id, @RequestBody Band band) {
+    public ResponseEntity<Band> updateBand(@PathVariable("id") Long id, @RequestBody Band band, HttpServletRequest request) {
+        if (!bandService.isTokenValidBoss(request)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         logger.info("Updating band id = {}", id);
         return ResponseEntity.ok(bandService.update(id, band));
     }
