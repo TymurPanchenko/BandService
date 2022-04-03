@@ -27,7 +27,7 @@ public class BandServiceImpl implements BandService {
     private final BandRepository bandRepository;
     private final RestTemplate restTemplate;
     private final BandClientProperties bandClientProperties;
-    @Value("my.app.secret")
+    @Value("${my.app.secret}")
     private String jwtSecret;
 
     public BandServiceImpl(BandRepository bandRepository, HttpComponentsClientHttpRequestFactory factory, BandClientProperties bandClientProperties) {
