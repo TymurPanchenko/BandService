@@ -11,6 +11,8 @@ import com.example.bandservice.service.BandService;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -67,33 +69,34 @@ public class BandServiceImpl implements BandService {
     }
 
     @Override
-    public Map<String, List<String>> getReport() {
+    public Map<String, List<String>> getReport(HttpServletRequest request) {
         List<Band> bands = restTemplate.exchange(bandClientProperties.getUrlBands() + "/all",
-                HttpMethod.GET, null, new ParameterizedTypeReference<List<Band>>() {
+                HttpMethod.GET, new HttpEntity<>(createHeaders(request.getHeader("Authorization"))), new ParameterizedTypeReference<List<Band>>() {
                 }).getBody();
         Map<String, List<String>> map = new HashMap<>();
         if (bands == null) {
             throw new NullBandReferenceException("There are on bands");
         }
         for (Band b : bands) {
-            map.put(b.getName(), getSingleReport(b.getId()));
+            map.put(b.getName(), getSingleReport(b.getId(), request));
         }
         return map;
     }
 
 
     @Override
-    public List<String> getSingleReport(Long id) {
+    public List<String> getSingleReport(Long id, HttpServletRequest request) {
+        HttpHeaders headers = createHeaders(request.getHeader("Authorization"));
         List<User> users = restTemplate.exchange(bandClientProperties.getUrlUsers(),
-                HttpMethod.GET, null, new ParameterizedTypeReference<List<User>>() {
+                HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<User>>() {
                 }).getBody();
         Map<String, List<Weapon>> weapons =
                 restTemplate.exchange(bandClientProperties.getUrlWeapons(),
-                        HttpMethod.GET, null, new ParameterizedTypeReference<Map<String, List<Weapon>>>() {
+                        HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<Map<String, List<Weapon>>>() {
                         }).getBody();
         List<Task> tasks =
                 restTemplate.exchange(bandClientProperties.getUrlTasks(),
-                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Task>>() {
+                        HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<Task>>() {
                         }).getBody();
         List<User> listUser = users.stream().filter(o -> o.getBandId().equals(id)).collect(Collectors.toList());
         List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getBand_id().equals(id)).collect(Collectors.toList());
@@ -118,20 +121,21 @@ public class BandServiceImpl implements BandService {
     }
 
     @Override
-    public String getReadyCheck(Long id) {
+    public String getReadyCheck(Long id, HttpServletRequest request) {
         if (id.equals(0L)) {
             return "Task is already done";
         }
+        HttpHeaders headers = createHeaders(request.getHeader("Authorization"));
         List<User> users = restTemplate.exchange(bandClientProperties.getUrlUsers(),
-                HttpMethod.GET, null, new ParameterizedTypeReference<List<User>>() {
+                HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<User>>() {
                 }).getBody();
         Map<String, List<Weapon>> weapons =
                 restTemplate.exchange(bandClientProperties.getUrlWeapons(),
-                        HttpMethod.GET, null, new ParameterizedTypeReference<Map<String, List<Weapon>>>() {
+                        HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<Map<String, List<Weapon>>>() {
                         }).getBody();
         List<Task> tasks =
                 restTemplate.exchange(bandClientProperties.getUrlTasks(),
-                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Task>>() {
+                        HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<Task>>() {
                         }).getBody();
         List<Task> listTask = tasks.stream().filter(o -> o.getId().equals(id)).collect(Collectors.toList());
         if (listTask.isEmpty()) {
@@ -191,6 +195,12 @@ public class BandServiceImpl implements BandService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private HttpHeaders createHeaders(String jwt) {
+        return new HttpHeaders() {{
+            set("Authorization", jwt);
+        }};
     }
 
 }

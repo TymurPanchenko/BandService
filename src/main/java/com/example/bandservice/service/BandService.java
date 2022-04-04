@@ -19,11 +19,11 @@ public interface BandService {
 
     List<Band> getAll();
 
-    Map<String, List<String>> getReport();
+    Map<String, List<String>> getReport(HttpServletRequest request);
 
-    List<String> getSingleReport(Long id);
+    List<String> getSingleReport(Long id, HttpServletRequest request);
 
-    String getReadyCheck(Long id);
+    String getReadyCheck(Long id, HttpServletRequest request);
 
     boolean isTokenValidBoss(HttpServletRequest request);
 

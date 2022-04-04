@@ -83,7 +83,7 @@ public class BandController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         logger.info("Getting global report");
-        return ResponseEntity.ok(bandService.getReport());
+        return ResponseEntity.ok(bandService.getReport(request));
     }
 
     @GetMapping("/{id}/report")
@@ -92,7 +92,7 @@ public class BandController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         logger.info("Getting band report with id {}", id);
-        return ResponseEntity.ok(bandService.getSingleReport(id));
+        return ResponseEntity.ok(bandService.getSingleReport(id, request));
     }
 
     @GetMapping("/tasks/{id}/check")
@@ -101,7 +101,7 @@ public class BandController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         logger.info("Checking task with id {}", id);
-        return ResponseEntity.ok(bandService.getReadyCheck(id));
+        return ResponseEntity.ok(bandService.getReadyCheck(id, request));
     }
 
     @DeleteMapping("/{id}")
