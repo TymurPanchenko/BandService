@@ -70,7 +70,7 @@ public class BandServiceImpl implements BandService {
 
     @Override
     public Map<String, List<String>> getReport(HttpServletRequest request) {
-        List<Band> bands = restTemplate.exchange(bandClientProperties.getUrlBands() + "/all",
+        List<Band> bands = restTemplate.exchange(bandClientProperties.getUrlBands(),
                 HttpMethod.GET, new HttpEntity<>(createHeaders(request.getHeader("Authorization"))), new ParameterizedTypeReference<List<Band>>() {
                 }).getBody();
         Map<String, List<String>> map = new HashMap<>();
