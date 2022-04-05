@@ -14,9 +14,11 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,7 +72,7 @@ public class BandServiceImpl implements BandService {
 
     @Override
     public Map<String, List<String>> getReport(HttpServletRequest request) {
-        List<Band> bands = restTemplate.exchange(bandClientProperties.getUrlBands() + "/all",
+        List<Band> bands = restTemplate.exchange(bandClientProperties.getUrlBands(),
                 HttpMethod.GET, new HttpEntity<>(createHeaders(request.getHeader("Authorization"))), new ParameterizedTypeReference<List<Band>>() {
                 }).getBody();
         Map<String, List<String>> map = new HashMap<>();
@@ -98,8 +100,8 @@ public class BandServiceImpl implements BandService {
                 restTemplate.exchange(bandClientProperties.getUrlTasks(),
                         HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<Task>>() {
                         }).getBody();
-        List<User> listUser = users.stream().filter(o -> o.getBandId().equals(id)).collect(Collectors.toList());
-        List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getBand_id().equals(id)).collect(Collectors.toList());
+        List<User> listUser = users.stream().filter(o -> o.getBandId() != null).filter(o -> o.getBandId().equals(id)).collect(Collectors.toList());
+        List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getTask_id() != null).filter(o -> o.getBand_id().equals(id)).collect(Collectors.toList());
         List<Task> listTask = tasks.stream().filter(o -> o.getId().equals(id)).collect(Collectors.toList());
         List<String> s = new ArrayList<>();
         if (listUser.isEmpty()) {
@@ -137,13 +139,13 @@ public class BandServiceImpl implements BandService {
                 restTemplate.exchange(bandClientProperties.getUrlTasks(),
                         HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<Task>>() {
                         }).getBody();
-        List<Task> listTask = tasks.stream().filter(o -> o.getId().equals(id)).collect(Collectors.toList());
+        List<Task> listTask = tasks.stream().filter(o -> o.getId() != null).filter(o -> o.getId().equals(id)).collect(Collectors.toList());
         if (listTask.isEmpty()) {
             throw new NullBandReferenceException("There is no task with id " + id);
         }
         Long l = listTask.get(0).getId();
-        List<User> listUser = users.stream().filter(o -> o.getTaskId().equals(l)).collect(Collectors.toList());
-        List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getTask_id().equals(l)).collect(Collectors.toList());
+        List<User> listUser = users.stream().filter(o -> o.getTaskId() != null).filter(o -> o.getTaskId().equals(l)).collect(Collectors.toList());
+        List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getTask_id() != null).filter(o -> o.getTask_id().equals(l)).collect(Collectors.toList());
         int x = listUser.size();
         for (Weapon w : listWeapon) {
             x += w.getDamage();
@@ -169,31 +171,31 @@ public class BandServiceImpl implements BandService {
 
     @Override
     public boolean isTokenValidBoss(HttpServletRequest request) {
-        try {
-            String headerAuth = request.getHeader("Authorization");
-            if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
-                String[] s = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(headerAuth.substring(7)).getBody().getSubject().split(" ");
-                return s[2].contains("ROLE_BOSS");
+        String headerAuth = request.getHeader("Authorization");
+        if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
+            String[] s = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(headerAuth.substring(7)).getBody().getSubject().split(" ");
+            if (s[2].contains("ROLE_BOSS")) {
+                return true;
             } else {
-                return false;
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
-        } catch (Exception e) {
-            return false;
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
 
     @Override
     public boolean isTokenValidBossAndUser(HttpServletRequest request) {
-        try {
-            String headerAuth = request.getHeader("Authorization");
-            if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
-                String[] s = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(headerAuth.substring(7)).getBody().getSubject().split(" ");
-                return s[2].contains("ROLE_BOSS") || s[2].contains("ROLE_USER");
+        String headerAuth = request.getHeader("Authorization");
+        if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
+            String[] s = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(headerAuth.substring(7)).getBody().getSubject().split(" ");
+            if (s[2].contains("ROLE_BOSS") || s[2].contains("ROLE_USER")) {
+                return true;
             } else {
-                return false;
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
-        } catch (Exception e) {
-            return false;
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
 
