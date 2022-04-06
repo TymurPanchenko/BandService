@@ -9,17 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/bands")
@@ -36,7 +32,8 @@ public class BandController {
         bandService.isTokenValidBoss(request);
         logger.info("Creating new band");
         if (errors.hasErrors()) {
-            throw new NullBandReferenceException("Band is not valid");
+            logger.error("Band is not valid");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         Band band2 = bandService.readByName(band.getName());
         if (band2 != null) {
@@ -64,11 +61,7 @@ public class BandController {
         bandService.isTokenValidBossAndUser(request);
         logger.info("Getting band id = {}", id);
         Band band = bandService.readById(id);
-        if (Objects.isNull(band)) {
-            throw new NullBandReferenceException("Not found");
-        } else {
-            return ResponseEntity.ok(band);
-        }
+        return ResponseEntity.ok(band);
     }
 
     @GetMapping("/report")
@@ -100,9 +93,13 @@ public class BandController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Band> updateBand(@PathVariable("id") Long id, @RequestBody Band band, HttpServletRequest request) {
+    public ResponseEntity<Band> updateBand(@PathVariable("id") Long id, @Valid @RequestBody Band band, Errors errors, HttpServletRequest request) {
         bandService.isTokenValidBoss(request);
         logger.info("Updating band id = {}", id);
+        if (errors.hasErrors()) {
+            logger.error("Band is not valid");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
         return ResponseEntity.ok(bandService.update(id, band));
     }
 }
