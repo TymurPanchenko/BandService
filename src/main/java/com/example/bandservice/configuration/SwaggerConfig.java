@@ -32,7 +32,7 @@ public class SwaggerConfig {
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()))
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("com.example.bandservice.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .directModelSubstitute(SecurityProperties.User.class, java.util.Optional.class)

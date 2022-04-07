@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/bands")
+@RequestMapping("/bands")
 public class BandController {
     private final BandService bandService;
     private final Logger logger = LoggerFactory.getLogger(BandController.class);
