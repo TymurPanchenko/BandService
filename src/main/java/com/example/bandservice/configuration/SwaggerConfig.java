@@ -28,13 +28,12 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-
         return new Docket(DocumentationType.SWAGGER_2)
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()))
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.bandservice.controller"))
-                .paths(PathSelectors.regex("/api.*"))
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
                 .build()
                 .directModelSubstitute(SecurityProperties.User.class, java.util.Optional.class)
                 .apiInfo(metaData());

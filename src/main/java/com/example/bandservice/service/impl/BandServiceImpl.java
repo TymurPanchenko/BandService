@@ -3,10 +3,7 @@ package com.example.bandservice.service.impl;
 import com.example.bandservice.configuration.BandClientProperties;
 import com.example.bandservice.controller.BandController;
 import com.example.bandservice.exception.NullBandReferenceException;
-import com.example.bandservice.model.Band;
-import com.example.bandservice.model.Task;
-import com.example.bandservice.model.User;
-import com.example.bandservice.model.Weapon;
+import com.example.bandservice.model.*;
 import com.example.bandservice.repository.BandRepository;
 import com.example.bandservice.service.BandService;
 import io.jsonwebtoken.Jwts;
@@ -46,18 +43,23 @@ public class BandServiceImpl implements BandService {
     }
 
     @Override
-    public Band create(Band band) {
-        List<Band> list = getAll();
-        Long a;
-        try {
-            a = list.stream().max((o1, o2) -> {
-                return (int) (o1.getId() - o2.getId());
-            }).get().getId();
-        } catch (NoSuchElementException e) {
-            a = 0L;
+    public Band create(BandDTO band) {
+        Band band1 = bandRepository.findByName(band.getName());
+        if (band1 != null) {
+            logger.error("The band is in DB");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        band.setId(++a);
-        return bandRepository.save(band);
+        List<Band> list = bandRepository.findAllBands();
+        Long l;
+        try {
+            l = list.stream().max((o1, o2) -> (int) (o1.getId() - o2.getId())).get().getId();
+        } catch (NoSuchElementException e) {
+            l = 0L;
+        }
+        Band newBand = new Band();
+        newBand.setId(++l);
+        newBand.setName(band.getName());
+        return bandRepository.save(newBand);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class BandServiceImpl implements BandService {
             return band;
         } catch (NullPointerException e) {
             logger.error("Band is not found");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Band is not found");
         }
     }
 
@@ -161,7 +163,7 @@ public class BandServiceImpl implements BandService {
             List<Task> listTask = tasks.stream().filter(o -> o.getId() != null).filter(o -> o.getId().equals(id)).collect(Collectors.toList());
             if (listTask.isEmpty()) {
                 logger.error("There is no task with id " + id);
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
             Long l = listTask.get(0).getId();
             List<User> listUser = users.stream().filter(o -> o.getTaskId() != null).filter(o -> o.getTaskId().equals(l)).collect(Collectors.toList());
@@ -184,12 +186,12 @@ public class BandServiceImpl implements BandService {
             return band;
         } catch (NullPointerException e) {
             logger.error("Band is not found");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
     @Override
-    public Band update(Long id, Band band) {
+    public Band update(Long id, BandDTO band) {
         try {
             Band band1 = readById(id);
             band1.setId(id);
