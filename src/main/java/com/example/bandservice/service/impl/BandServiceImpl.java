@@ -119,7 +119,7 @@ public class BandServiceImpl implements BandService {
                             }).getBody();
             List<User> listUser = users.stream().filter(o -> o.getBandId() != null).filter(o -> o.getBandId().equals(id)).collect(Collectors.toList());
             List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getTask_id() != null).filter(o -> o.getBand_id().equals(id)).collect(Collectors.toList());
-            List<Task> listTask = tasks.stream().filter(o -> o.getId().equals(id)).collect(Collectors.toList());
+            List<Task> listTask = tasks.stream().filter(o -> o.getBandId() != null).filter(o -> o.getId().equals(id)).collect(Collectors.toList());
             List<String> s = new ArrayList<>();
             if (listUser.isEmpty()) {
                 s.add("There is no users");
