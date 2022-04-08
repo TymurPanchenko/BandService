@@ -201,7 +201,7 @@ public class BandServiceImpl implements BandService {
             bandRepository.update(id, band1.getName());
             return band1;
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
