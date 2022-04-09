@@ -24,7 +24,7 @@ public interface BandService {
 
     List<String> getSingleReport(Long id, HttpServletRequest request);
 
-    String getReadyCheck(Long id, HttpServletRequest request);
+    Boolean getReadyCheck(Long id, HttpServletRequest request);
 
     boolean isTokenValidBoss(HttpServletRequest request);
 

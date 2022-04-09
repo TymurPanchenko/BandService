@@ -72,7 +72,7 @@ public class BandController {
     }
 
     @GetMapping("/tasks/{id}/check")
-    public ResponseEntity<String> makeReadyCheck(@PathVariable("id") Long id, HttpServletRequest request) {
+    public ResponseEntity<Boolean> makeReadyCheck(@PathVariable("id") Long id, HttpServletRequest request) {
         bandService.isTokenValidBoss(request);
         logger.info("Checking task with id {}", id);
         return ResponseEntity.ok(bandService.getReadyCheck(id, request));

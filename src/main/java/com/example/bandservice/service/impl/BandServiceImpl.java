@@ -119,7 +119,7 @@ public class BandServiceImpl implements BandService {
                             }).getBody();
             List<User> listUser = users.stream().filter(o -> o.getBandId() != null).filter(o -> o.getBandId().equals(id)).collect(Collectors.toList());
             List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getTask_id() != null).filter(o -> o.getBand_id().equals(id)).collect(Collectors.toList());
-            List<Task> listTask = tasks.stream().filter(o -> o.getId().equals(id)).collect(Collectors.toList());
+            List<Task> listTask = tasks.stream().filter(o -> o.getBandId() != null).filter(o -> o.getBandId().equals(id)).collect(Collectors.toList());
             List<String> s = new ArrayList<>();
             if (listUser.isEmpty()) {
                 s.add("There is no users");
@@ -143,11 +143,8 @@ public class BandServiceImpl implements BandService {
     }
 
     @Override
-    public String getReadyCheck(Long id, HttpServletRequest request) {
+    public Boolean getReadyCheck(Long id, HttpServletRequest request) {
         try {
-            if (id.equals(0L)) {
-                return "Task is already done";
-            }
             HttpHeaders headers = createHeaders(request.getHeader("Authorization"));
             List<User> users = restTemplate.exchange(bandClientProperties.getUrlUsers(),
                     HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<User>>() {
@@ -169,10 +166,13 @@ public class BandServiceImpl implements BandService {
             List<User> listUser = users.stream().filter(o -> o.getTaskId() != null).filter(o -> o.getTaskId().equals(l)).collect(Collectors.toList());
             List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getTask_id() != null).filter(o -> o.getTask_id().equals(l)).collect(Collectors.toList());
             int x = listUser.size();
+            if (x < 1) {
+                return false;
+            }
             for (Weapon w : listWeapon) {
                 x += w.getDamage();
             }
-            return x >= listTask.get(0).getStrength() ? "All is in readiness. Start executing" : "You are not strong enough for this task";
+            return x >= listTask.get(0).getStrength();
         } catch (HttpClientErrorException e) {
             throw new ResponseStatusException(HttpStatus.valueOf(e.getRawStatusCode()));
         }
@@ -201,7 +201,7 @@ public class BandServiceImpl implements BandService {
             bandRepository.update(id, band1.getName());
             return band1;
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
