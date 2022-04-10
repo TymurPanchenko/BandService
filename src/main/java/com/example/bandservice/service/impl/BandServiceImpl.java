@@ -6,7 +6,10 @@ import com.example.bandservice.exception.NullBandReferenceException;
 import com.example.bandservice.model.*;
 import com.example.bandservice.repository.BandRepository;
 import com.example.bandservice.service.BandService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -118,7 +121,7 @@ public class BandServiceImpl implements BandService {
                             HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<Task>>() {
                             }).getBody();
             List<User> listUser = users.stream().filter(o -> o.getBandId() != null).filter(o -> o.getBandId().equals(id)).collect(Collectors.toList());
-            List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getTask_id() != null).filter(o -> o.getBand_id().equals(id)).collect(Collectors.toList());
+            List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getBand_id() != null).filter(o -> o.getBand_id().equals(id)).collect(Collectors.toList());
             List<Task> listTask = tasks.stream().filter(o -> o.getBandId() != null).filter(o -> o.getBandId().equals(id)).collect(Collectors.toList());
             List<String> s = new ArrayList<>();
             if (listUser.isEmpty()) {
@@ -179,58 +182,60 @@ public class BandServiceImpl implements BandService {
     }
 
     @Override
-    public Band readByName(String name) {
-        try {
-            Band band = bandRepository.findByName(name);
-            band.getName();
-            return band;
-        } catch (NullPointerException e) {
-            logger.error("Band is not found");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    public Object readByName(String name) {
+        Band band = bandRepository.findByName(name);
+        if (band == null) {
+            logger.info("Band is not found");
+            return Collections.emptyList();
         }
+        return band;
     }
 
     @Override
     public Band update(Long id, BandDTO band) {
-        try {
-            Band band1 = readById(id);
-            band1.setId(id);
-            if (band.getName() != null) {
-                band1.setName(band.getName());
-            }
-            bandRepository.update(id, band1.getName());
-            return band1;
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        Band band1 = readById(id);
+        band1.setId(id);
+        if (band.getName() != null) {
+            band1.setName(band.getName());
         }
+        bandRepository.update(id, band1.getName());
+        return band1;
     }
 
     @Override
     public boolean isTokenValidBoss(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
-        if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
-            String[] s = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(headerAuth.substring(7)).getBody().getSubject().split(" ");
-            if (s[2].contains("ROLE_BOSS")) {
-                return true;
+        try {
+            String headerAuth = request.getHeader("Authorization");
+            if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
+                String[] s = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(headerAuth.substring(7)).getBody().getSubject().split(" ");
+                if (s[2].contains("ROLE_BOSS")) {
+                    return true;
+                } else {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+                }
             } else {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
             }
-        } else {
+        } catch (JwtException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
 
     @Override
     public boolean isTokenValidBossAndUser(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
-        if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
-            String[] s = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(headerAuth.substring(7)).getBody().getSubject().split(" ");
-            if (s[2].contains("ROLE_BOSS") || s[2].contains("ROLE_USER")) {
-                return true;
+        try {
+            String headerAuth = request.getHeader("Authorization");
+            if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
+                String[] s = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(headerAuth.substring(7)).getBody().getSubject().split(" ");
+                if (s[2].contains("ROLE_BOSS") || s[2].contains("ROLE_USER")) {
+                    return true;
+                } else {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+                }
             } else {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
             }
-        } else {
+        } catch (JwtException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }

@@ -12,7 +12,7 @@ public interface BandService {
 
     Band readById(Long id);
 
-    Band readByName(String name);
+    Object readByName(String name);
 
     Band update(Long id, BandDTO band);
 
