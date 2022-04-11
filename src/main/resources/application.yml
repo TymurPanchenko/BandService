@@ -26,7 +26,7 @@ astra.db:
 
 logging:
   file:
-    name: log.txt
+    name: log.log
 
 bands:
   url-weapons: https://weapon-service-v1.herokuapp.com/api/v1/weapons/
