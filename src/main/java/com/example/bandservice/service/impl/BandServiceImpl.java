@@ -121,7 +121,7 @@ public class BandServiceImpl implements BandService {
                             HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<Task>>() {
                             }).getBody();
             List<User> listUser = users.stream().filter(o -> o.getBandId() != null).filter(o -> o.getBandId().equals(id)).collect(Collectors.toList());
-            List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getBand_id() != null).filter(o -> o.getBand_id().equals(id)).collect(Collectors.toList());
+            List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getBandId() != null).filter(o -> o.getBandId().equals(id)).collect(Collectors.toList());
             List<Task> listTask = tasks.stream().filter(o -> o.getBandId() != null).filter(o -> o.getBandId().equals(id)).collect(Collectors.toList());
             List<String> s = new ArrayList<>();
             if (listUser.isEmpty()) {
@@ -167,7 +167,7 @@ public class BandServiceImpl implements BandService {
             }
             Long l = listTask.get(0).getId();
             List<User> listUser = users.stream().filter(o -> o.getTaskId() != null).filter(o -> o.getTaskId().equals(l)).collect(Collectors.toList());
-            List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getTask_id() != null).filter(o -> o.getTask_id().equals(l)).collect(Collectors.toList());
+            List<Weapon> listWeapon = weapons.get("weapons").stream().filter(o -> o.getTaskId() != null).filter(o -> o.getTaskId().equals(l)).collect(Collectors.toList());
             int x = listUser.size();
             if (x < 1) {
                 return false;
