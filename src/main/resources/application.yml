@@ -10,6 +10,10 @@ spring:
       connection:
         connection-timeout: 10s
         init-query-timeout: 10s
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
 
 datastax.astra:
     secure-connect-bundle: secure-connect-band.zip
@@ -22,7 +26,7 @@ astra.db:
 
 logging:
   file:
-    name: log.txt
+    name: log.log
 
 bands:
   url-weapons: https://weapon-service-v1.herokuapp.com/api/v1/weapons/

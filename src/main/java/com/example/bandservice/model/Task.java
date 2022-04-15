@@ -10,7 +10,6 @@ public class Task {
     private boolean isCompleted;
     private Long bandId;
     private Long strength;
-    private Long numberOfPeople;
 
     public Task() {
     }

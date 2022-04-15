@@ -1,19 +1,20 @@
 package com.example.bandservice.service;
 
 import com.example.bandservice.model.Band;
+import com.example.bandservice.model.BandDTO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
 public interface BandService {
-    Band create(Band band);
+    Band create(BandDTO band);
 
     Band readById(Long id);
 
-    Band readByName(String name);
+    Object readByName(String name);
 
-    Band update(Long id, Band band);
+    Band update(Long id, BandDTO band);
 
     void delete(Long id);
 
@@ -23,7 +24,7 @@ public interface BandService {
 
     List<String> getSingleReport(Long id, HttpServletRequest request);
 
-    String getReadyCheck(Long id, HttpServletRequest request);
+    Boolean getReadyCheck(Long id, HttpServletRequest request);
 
     boolean isTokenValidBoss(HttpServletRequest request);
 

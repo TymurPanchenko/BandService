@@ -2,6 +2,7 @@ package com.example.bandservice.controller;
 
 import com.example.bandservice.exception.NullBandReferenceException;
 import com.example.bandservice.model.Band;
+import com.example.bandservice.model.BandDTO;
 import com.example.bandservice.service.BandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,17 +29,9 @@ public class BandController {
     }
 
     @PostMapping
-    public ResponseEntity<Band> saveBand(@Valid @RequestBody Band band, Errors errors, HttpServletRequest request) {
+    public ResponseEntity<Band> saveBand(@Valid @RequestBody BandDTO band, HttpServletRequest request) {
         bandService.isTokenValidBoss(request);
         logger.info("Creating new band");
-        if (errors.hasErrors()) {
-            logger.error("Band is not valid");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-        Band band2 = bandService.readByName(band.getName());
-        if (band2 != null) {
-            throw new NullBandReferenceException("The band is in DB");
-        }
         return ResponseEntity.ok(bandService.create(band));
     }
 
@@ -79,7 +72,7 @@ public class BandController {
     }
 
     @GetMapping("/tasks/{id}/check")
-    public ResponseEntity<String> makeReadyCheck(@PathVariable("id") Long id, HttpServletRequest request) {
+    public ResponseEntity<Boolean> makeReadyCheck(@PathVariable("id") Long id, HttpServletRequest request) {
         bandService.isTokenValidBoss(request);
         logger.info("Checking task with id {}", id);
         return ResponseEntity.ok(bandService.getReadyCheck(id, request));
@@ -93,13 +86,9 @@ public class BandController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Band> updateBand(@PathVariable("id") Long id, @Valid @RequestBody Band band, Errors errors, HttpServletRequest request) {
+    public ResponseEntity<Band> updateBand(@PathVariable("id") Long id, @Valid @RequestBody BandDTO band, HttpServletRequest request) {
         bandService.isTokenValidBoss(request);
         logger.info("Updating band id = {}", id);
-        if (errors.hasErrors()) {
-            logger.error("Band is not valid");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
         return ResponseEntity.ok(bandService.update(id, band));
     }
 }

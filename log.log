@@ -1,0 +1,52 @@
+2022-04-11 11:43:23.545  INFO 12604 --- [main] c.e.bandservice.BandServiceApplication   : Starting BandServiceApplication using Java 11.0.13 on DESKTOP-E6O1NBB with PID 12604 (G:\projects\BandService\target\classes started by Owner in G:\projects\BandService)
+2022-04-11 11:43:23.670  INFO 12604 --- [main] c.e.bandservice.BandServiceApplication   : No active profile set, falling back to default profiles: default
+2022-04-11 11:43:28.115  INFO 12604 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Reactive Cassandra repositories in DEFAULT mode.
+2022-04-11 11:43:28.252  INFO 12604 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 122 ms. Found 0 Reactive Cassandra repository interfaces.
+2022-04-11 11:43:28.269  INFO 12604 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Cassandra repositories in DEFAULT mode.
+2022-04-11 11:43:28.785  INFO 12604 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 515 ms. Found 1 Cassandra repository interfaces.
+2022-04-11 11:43:31.456  INFO 12604 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-04-11 11:43:31.486  INFO 12604 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-04-11 11:43:31.490  INFO 12604 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-04-11 11:43:32.324  INFO 12604 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-04-11 11:43:32.331  INFO 12604 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 8389 ms
+2022-04-11 11:43:35.694  INFO 12604 --- [main] c.d.o.d.api.core.session.SessionBuilder  : Both a secure connect bundle and contact points were provided. These are mutually exclusive. The contact points from the secure bundle will have priority.
+2022-04-11 11:43:38.405  INFO 12604 --- [main] c.d.o.d.i.core.DefaultMavenCoordinates   : DataStax Java driver for Apache Cassandra(R) (com.datastax.oss:java-driver-core) version 4.13.0
+2022-04-11 11:43:41.081  INFO 12604 --- [s0-admin-0] c.d.oss.driver.internal.core.time.Clock  : Using native clock for microsecond precision
+2022-04-11 11:43:48.910  INFO 12604 --- [s0-admin-0] c.d.o.d.i.core.session.DefaultSession    : [s0] Negotiated protocol version V4 for the initial contact point, but cluster seems to support V5, keeping the negotiated version
+2022-04-11 11:43:55.579  INFO 12604 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-04-11 11:43:56.978  WARN 12604 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2022-04-11 11:43:58.013  INFO 12604 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-04-11 11:43:58.015  INFO 12604 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2022-04-11 11:43:58.314  INFO 12604 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2022-04-11 11:43:59.468  INFO 12604 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2022-04-11 11:44:00.422  INFO 12604 --- [main] c.e.bandservice.BandServiceApplication   : Started BandServiceApplication in 39.328 seconds (JVM running for 47.396)
+2022-04-11 11:44:07.535  INFO 12604 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-04-11 11:44:07.536  INFO 12604 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-04-11 11:44:07.539  INFO 12604 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2022-04-11 11:44:58.308  INFO 12604 --- [http-nio-8080-exec-3] c.e.b.controller.BandController          : Getting global report
+2022-04-11 11:47:22.642  INFO 9304 --- [main] c.e.bandservice.BandServiceApplication   : Starting BandServiceApplication using Java 11.0.13 on DESKTOP-E6O1NBB with PID 9304 (G:\projects\BandService\target\classes started by Owner in G:\projects\BandService)
+2022-04-11 11:47:22.650  INFO 9304 --- [main] c.e.bandservice.BandServiceApplication   : No active profile set, falling back to default profiles: default
+2022-04-11 11:47:25.842  INFO 9304 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Reactive Cassandra repositories in DEFAULT mode.
+2022-04-11 11:47:25.944  INFO 9304 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 87 ms. Found 0 Reactive Cassandra repository interfaces.
+2022-04-11 11:47:25.961  INFO 9304 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Cassandra repositories in DEFAULT mode.
+2022-04-11 11:47:26.027  INFO 9304 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 65 ms. Found 1 Cassandra repository interfaces.
+2022-04-11 11:47:27.590  INFO 9304 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-04-11 11:47:27.618  INFO 9304 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-04-11 11:47:27.619  INFO 9304 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-04-11 11:47:28.042  INFO 9304 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-04-11 11:47:28.044  INFO 9304 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5236 ms
+2022-04-11 11:47:28.793  INFO 9304 --- [main] c.d.o.d.api.core.session.SessionBuilder  : Both a secure connect bundle and contact points were provided. These are mutually exclusive. The contact points from the secure bundle will have priority.
+2022-04-11 11:47:30.500  INFO 9304 --- [main] c.d.o.d.i.core.DefaultMavenCoordinates   : DataStax Java driver for Apache Cassandra(R) (com.datastax.oss:java-driver-core) version 4.13.0
+2022-04-11 11:47:31.508  INFO 9304 --- [s0-admin-0] c.d.oss.driver.internal.core.time.Clock  : Using native clock for microsecond precision
+2022-04-11 11:47:35.804  INFO 9304 --- [s0-admin-0] c.d.o.d.i.core.session.DefaultSession    : [s0] Negotiated protocol version V4 for the initial contact point, but cluster seems to support V5, keeping the negotiated version
+2022-04-11 11:47:39.650  INFO 9304 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-04-11 11:47:40.080  WARN 9304 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2022-04-11 11:47:40.270  INFO 9304 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-04-11 11:47:40.272  INFO 9304 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2022-04-11 11:47:40.310  INFO 9304 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2022-04-11 11:47:40.409  INFO 9304 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2022-04-11 11:47:40.736  INFO 9304 --- [main] c.e.bandservice.BandServiceApplication   : Started BandServiceApplication in 19.999 seconds (JVM running for 25.277)
+2022-04-11 11:49:01.744  INFO 9304 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-04-11 11:49:01.745  INFO 9304 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-04-11 11:49:01.749  INFO 9304 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2022-04-11 11:49:01.924  INFO 9304 --- [http-nio-8080-exec-2] c.e.b.controller.BandController          : Getting global report
