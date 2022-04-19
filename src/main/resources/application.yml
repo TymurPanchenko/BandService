@@ -14,6 +14,8 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+server:
+  port: ${PORT:8080}
 
 datastax.astra:
     secure-connect-bundle: secure-connect-band.zip
